@@ -4,13 +4,10 @@
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,12 +15,19 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Startup Name Generator'),
+          actions: [
+            ElevatedButton(
+              child: Text('Cards'),
+              onPressed: () => runApp(Dashboard()),
+            )
+          ],
         ),
         body: const Center(
           child: RandomWords(),
         ),
-      ),
-    );
+        ),
+      );
+
   }
 }
 
@@ -56,5 +60,48 @@ class _RandomWordsState extends State<RandomWords> {
       },
     );
   }
+}
 
+
+class Dashboard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        home: Scaffold(
+          appBar: AppBar(
+            title: Text('Cards'),
+            actions: [
+              ElevatedButton(
+                child: Text('Voltar'),
+                onPressed: ()=> runApp(MyApp()),
+              )
+            ],
+          ),
+          body: Column(
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 185,
+                    height: 600,
+                    child:Card(
+                      // color: Colors.black,
+                      child: RandomWords(),
+                    ),
+                  ),
+                  Container(
+                    width: 185,
+                    height: 600,
+                    child:Card(
+                      // color: Colors.black,
+                      child: RandomWords(),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+      ),
+    );
+  }
 }
