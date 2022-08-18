@@ -7,11 +7,21 @@ void main() => runApp(const MyWidget());
 
 final saved = <WordPair>[];
 final listaNome = <WordPair>[];
+final suggestions = <WordPair>[];
+var palavraVez = "";
+int qtdPalavras = 40;
 
 class Argumentos {
   final WordPair nome;
   Argumentos(this.nome);
 }
+class Repositorio {
+  WordPair nomePalavra;
+
+  Repositorio(this.nomePalavra);
+}
+
+
 
 class MyWidget extends StatelessWidget {
   const MyWidget({Key? key}) : super(key: key);
@@ -60,10 +70,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final suggestions = <WordPair>[];
+
   final biggerFont = const TextStyle(fontSize: 18);
 
   String viewType = 'list';
+
 
   lista_card() {
     if (viewType == 'list') {
@@ -86,25 +97,31 @@ class _MyAppState extends State<MyApp> {
     if (viewType == 'list') {
       return ListView.builder(
         padding: const EdgeInsets.all(16.0),
-        itemBuilder: /*1*/ (context, i) {
-          if (i.isOdd) return const Divider(); /*2*/
-
+        itemCount: qtdPalavras,
+        itemBuilder: /*1*/ (conext, i) {
           final index = i ~/ 2; /*3*/
-          if (index >= suggestions.length) {
-            suggestions.addAll(generateWordPairs().take(10)); /*4*/
+          // if(suggestions.length <= 20) {
+            if (i.isOdd) return const Divider(); /*2*/
+
+            if (index <= suggestions.length) {
+            suggestions.addAll(generateWordPairs().take(20)); /*4*/
           }
+          // }
+          
           final alreadySaved = saved.contains(suggestions[index]);
           return ListTile(
               title: Dismissible(
                 key: ObjectKey(suggestions[index].asPascalCase),
-                child: Text(
-                  suggestions[index].asPascalCase,
-                  style: biggerFont,
-                ),
+                child: 
+                    Text( 
+                      suggestions[index].asPascalCase,
+                      style: biggerFont,
+                    ),
                 onDismissed: (direction) {
                   setState(() {
                     suggestions.removeAt(index);
-                    saved.removeAt(index);
+                    // print(suggestions);
+                    // saved.removeAt(index);
                   });
                 },
               ),
@@ -126,11 +143,9 @@ class _MyAppState extends State<MyApp> {
                     arguments: Argumentos(
                       suggestions[index],
                     ));
-                listaNome.length <= 20 &&
-                        !listaNome.contains(suggestions[index])
-                    ? listaNome.add(suggestions[index])
-                    : null;
-              });
+              }
+              );
+              
         },
       );
     } else {
@@ -150,9 +165,6 @@ class _MyAppState extends State<MyApp> {
                     arguments: Argumentos(
                       suggestions[i],
                     ));
-                listaNome.length <= 20 && !listaNome.contains(suggestions[i])
-                    ? listaNome.add(suggestions[i])
-                    : null;
               },
               child: Text(
                 suggestions[i].asPascalCase,
@@ -171,7 +183,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Startup Name Generator'), actions: [
+      appBar: AppBar(title: const Text('Startup Name Generator', style: TextStyle(fontSize:16),), actions: [
         ElevatedButton(
           onPressed: botao,
           child: lista_card(),
@@ -190,10 +202,17 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class TelaEditar extends StatelessWidget {
+class TelaEditar extends StatefulWidget {
   static const routeName = '/editar';
 
   const TelaEditar({Key? key}) : super(key: key);
+
+  @override
+  State<TelaEditar> createState() => _TelaEditarState();
+}
+
+class _TelaEditarState extends State<TelaEditar> {
+
 
   @override
   Widget build(BuildContext context) {
@@ -213,10 +232,7 @@ class TelaEditar extends StatelessWidget {
           Center(
               child: Text(argumentos.nome.asPascalCase,
                   style: const TextStyle(fontSize: 32, color: Colors.red))),
-          Text(
-            "Palavras armazenadas: " + listaNome.toString(),
-            style: const TextStyle(fontSize: 20),
-          )
+          
         ],
       ),
     );
