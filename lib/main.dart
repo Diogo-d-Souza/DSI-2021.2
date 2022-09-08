@@ -17,7 +17,6 @@ class Argumentos {
 }
 class Repositorio {
   WordPair nomePalavra;
-
   Repositorio(this.nomePalavra);
 }
 
@@ -74,6 +73,8 @@ class _MyAppState extends State<MyApp> {
   final biggerFont = const TextStyle(fontSize: 18);
 
   String viewType = 'list';
+
+
 
 
   lista_card() {
@@ -196,6 +197,9 @@ class _MyAppState extends State<MyApp> {
           onPressed: () => Navigator.push(context,
               MaterialPageRoute(builder: (context) => const Favoritos())),
         ),
+        ElevatedButton(onPressed: () =>
+          Navigator.pushNamed(context, '/editar', arguments: Argumentos(WordPair(' ',' '))),
+        child: const Icon(Icons.add),)
       ]),
       body: body(),
     );
@@ -213,6 +217,11 @@ class TelaEditar extends StatefulWidget {
 
 class _TelaEditarState extends State<TelaEditar> {
 
+  adicionarItem(){
+    qtdPalavras = qtdPalavras - 2;
+    int proxIndex = (qtdPalavras/2).toInt();
+    suggestions[proxIndex] = WordPair(palavraVez, ' ');
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -226,13 +235,37 @@ class _TelaEditarState extends State<TelaEditar> {
         children: [
           const Center(
               child: Text(
-            "Palavra que será editada: ",
+            "Palavra que será editada ou inlcuida: ",
             style: TextStyle(fontSize: 20),
           )),
           Center(
               child: Text(argumentos.nome.asPascalCase,
                   style: const TextStyle(fontSize: 32, color: Colors.red))),
-          
+          Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(15),
+            child: TextFormField(
+                    onChanged: (text) => palavraVez = text,
+                    autofocus: true,
+                    keyboardType: TextInputType.text,
+                    decoration: const InputDecoration( 
+                      labelText: "Digite uma plavra para ser adicionada",
+                      labelStyle: TextStyle(
+                        color: Colors.black38,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16,
+                      )
+              ), 
+              )
+              ),
+              Center(child: ElevatedButton(
+                child: Text('Adicionar'),
+                onPressed: () => adicionarItem(),
+              ),)
+        ],
+      ),
         ],
       ),
     );
