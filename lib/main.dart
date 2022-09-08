@@ -7,11 +7,33 @@ import 'package:flutter/material.dart';
 void main() async{
   runApp(const MyWidget());
   await Firebase.initializeApp();
-  FirebaseFirestore.instance.collection('teste').doc().set({
-    'teste': 'funcionou',
-    'teste1': 'funcionooou'
-
-  });
+  var armazenamento = FirebaseFirestore.instance.collection('armazem').doc('palavras');
+  armazenamento.set({
+                  'nome1': suggestions[0].asPascalCase,
+                  'nome2': suggestions[1].asPascalCase,
+                  'nome3': suggestions[2].asPascalCase,
+                  'nome4': suggestions[3].asPascalCase,
+                  'nome5': suggestions[4].asPascalCase,
+                  'nome6': suggestions[5].asPascalCase,
+                  'nome7': suggestions[6].asPascalCase,
+                  'nome8': suggestions[7].asPascalCase,
+                  'nome9': suggestions[8].asPascalCase,
+                  'nome10': suggestions[9].asPascalCase,
+                  'nome11': suggestions[10].asPascalCase,
+                  'nome12': suggestions[11].asPascalCase,
+                  'nome13': suggestions[12].asPascalCase,
+                  'nome14': suggestions[13].asPascalCase,
+                  'nome15': suggestions[14].asPascalCase,
+                  'nome16': suggestions[15].asPascalCase,
+                  'nome17': suggestions[16].asPascalCase,
+                  'nome18': suggestions[17].asPascalCase,
+                  'nome19': suggestions[18].asPascalCase,
+                  'nome20': suggestions[19].asPascalCase
+              });
+    var teste = armazenamento.get().then(
+      (res) => print("Successfully completed"),
+      onError: (e) => print("Error completing: $e"),
+    );
 
 } 
 
@@ -81,6 +103,15 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
+  palavra() async {
+    await Firebase.initializeApp();
+    var testando = FirebaseFirestore.instance.collection('armazem').doc('palavras');
+    var teste = testando.get().then(
+      (res) => print("Successfully completed"),
+      onError: (e) => print("Error completing: $e"),
+    );
+
+  }
   final biggerFont = const TextStyle(fontSize: 18);
 
   String viewType = 'list';
@@ -105,7 +136,7 @@ class _MyAppState extends State<MyApp> {
     setState(() {});
   }
 
-  body() {
+  body(){
     if (viewType == 'list') {
       return ListView.builder(
         padding: const EdgeInsets.all(16.0),
@@ -116,7 +147,7 @@ class _MyAppState extends State<MyApp> {
             if (i.isOdd) return const Divider(); /*2*/
 
             if (index <= suggestions.length) {
-            suggestions.addAll(generateWordPairs().take(20)); /*4*/
+                suggestions.addAll(generateWordPairs().take(20));
           }
           // }
           
@@ -132,7 +163,6 @@ class _MyAppState extends State<MyApp> {
                 onDismissed: (direction) {
                   setState(() {
                     suggestions.removeAt(index);
-                    // print(suggestions);
                     // saved.removeAt(index);
                   });
                 },
@@ -227,11 +257,19 @@ class TelaEditar extends StatefulWidget {
 }
 
 class _TelaEditarState extends State<TelaEditar> {
+  var count = 21;
 
-  adicionarItem(){
+  adicionarItem() async{
+    await Firebase.initializeApp();
+    var armazenamento = FirebaseFirestore.instance.collection('armazem').doc('palavras');
     qtdPalavras = qtdPalavras - 2;
     int proxIndex = (qtdPalavras/2).toInt();
     suggestions[proxIndex] = WordPair(palavraVez, ' ');
+
+    armazenamento.update({
+      'nome${count}': WordPair(palavraVez, ' ').asPascalCase
+    });
+    count = count + 1;
     }
 
   @override
