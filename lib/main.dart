@@ -1,9 +1,20 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(const MyWidget());
+void main() async{
+  runApp(const MyWidget());
+  await Firebase.initializeApp();
+  FirebaseFirestore.instance.collection('teste').doc().set({
+    'teste': 'funcionou',
+    'teste1': 'funcionooou'
+
+  });
+
+} 
+
 
 final saved = <WordPair>[];
 final listaNome = <WordPair>[];
